@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Profile: Kishon Clayborne</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Application Structure Plan: A single-page application with a fixed left-hand navigation sidebar for desktop and a pop-out menu for mobile. This structure provides clear, persistent navigation, allowing users to jump between key aspects of the professional narrative (Pillars, Experience, etc.) without losing context. The core of the application is an interactive "Four Pillars" section using clickable cards to reveal detailed information in a dedicated display area, promoting user engagement and focused exploration. A visual timeline for career experience and a dynamic chart for key growth metrics are included to make data easily digestible. This non-linear, thematic structure was chosen over a simple chronological resume to better highlight the core brand message of a multi-faceted executive, catering to high-level audiences like investors and partners who prioritize strategic capabilities over a simple work history. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Golden Krust Growth Metrics (Locations, Team Size). Goal: Compare. Viz Method: Bar Chart (Chart.js). Interaction: Tooltips on hover. Justification: A bar chart provides a clear, immediate visual comparison of the "before and after" scale of the enterprise, which is more impactful than a static table. Library: Chart.js.
+        - Report Info: The Four Pillars of the Brand. Goal: Organize & Inform. Viz Method: Interactive Cards (HTML/CSS/JS). Interaction: Click to expand/reveal details in a separate, dedicated container. Justification: Cards create a clean, modern dashboard feel. The click-to-reveal interaction encourages user engagement and breaks down large amounts of text into digestible, user-initiated chunks, improving comprehension and reducing cognitive load. Method: Vanilla JS.
+        - Report Info: Career Experience. Goal: Show change & Inform. Viz Method: Vertical Timeline (HTML/CSS). Interaction: Content is presented chronologically. Justification: A timeline is the most intuitive way to present career progression, clearly showing the journey from one role to the next and how skills were compounded over time. Method: HTML/Tailwind CSS.
+        - Report Info: Klayrock Client Results. Goal: Inform/Impact. Viz Method: "Stat Cards" with large numbers and brief descriptions. Interaction: Static display. Justification: High-impact numbers are best presented simply and boldly to grab attention and convey value quickly. Method: HTML/Tailwind CSS.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #3D3D3D;
+        }
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        .nav-link.active {
+            color: #C0843E;
+            background-color: #FDFBF8;
+            border-right: 3px solid #C0843E;
+        }
+        .nav-link:hover {
+            color: #A46E31;
+            background-color: #FDFBF8;
+        }
+        .pillar-card {
+            transition: all 0.3s ease;
+            border: 1px solid #EAEAEA;
+        }
+        .pillar-card.active, .pillar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border-color: #C0843E;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        [x-cloak] { display: none !important; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+</head>
+<body x-data="{ open: false }" class="bg-gray-50">
+    <div class="md:flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="z-20 w-64 min-h-screen flex-shrink-0 hidden md:block bg-white border-r border-gray-200">
+            <div class="py-4 text-gray-500">
+                <a class="ml-6 text-lg font-bold text-gray-800 font-display" href="#">
+                    Kishon Clayborne
+                </a>
+                <ul class="mt-6">
+                    <li class="relative px-6 py-3">
+                        <a class="nav-link inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800" href="#home">
+                            <span class="ml-4">Home</span>
+                        </a>
+                    </li>
+                    <li class="relative px-6 py-3">
+                        <a class="nav-link inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800" href="#pillars">
+                            <span class="ml-4">The Four Pillars</span>
+                        </a>
+                    </li>
+                    <li class="relative px-6 py-3">
+                        <a class="nav-link inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800" href="#experience">
+                            <span class="ml-4">Career Experience</span>
+                        </a>
+                    </li>
+                     <li class="relative px-6 py-3">
+                        <a class="nav-link inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800" href="#education">
+                            <span class="ml-4">Education & Skills</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="px-6 my-6">
+                    <a href="https://www.linkedin.com/in/kishonclayborne/" target="_blank" class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-[#C0843E] border border-transparent rounded-lg active:bg-[#A46E31] hover:bg-[#A46E31] focus:outline-none focus:shadow-outline-purple">
+                        Connect on LinkedIn
+                        <span class="ml-2" aria-hidden="true">&#10132;</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Mobile Sidebar -->
+        <div x-show="open" x-cloak class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center" @click="open = false"></div>
+        <aside x-show="open" x-cloak class="fixed inset-y-0 z-30 flex-shrink-0 w-64 mt-16 overflow-y-auto bg-white md:hidden" 
+            x-transition:enter="transition ease-in-out duration-150"
+            x-transition:enter-start="opacity-0 transform -translate-x-20"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in-out duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0 transform -translate-x-20"
+            @keydown.escape="open = false">
+            <div class="py-4 text-gray-500">
+                <a class="ml-6 text-lg font-bold text-gray-800 font-display" href="#">Kishon Clayborne</a>
+                <ul class="mt-6" @click="open = false">
+                     <li class="relative px-6 py-3"><a class="nav-link inline-flex items-center w-full" href="#home"><span class="ml-4">Home</span></a></li>
+                     <li class="relative px-6 py-3"><a class="nav-link inline-flex items-center w-full" href="#pillars"><span class="ml-4">The Four Pillars</span></a></li>
+                     <li class="relative px-6 py-3"><a class="nav-link inline-flex items-center w-full" href="#experience"><span class="ml-4">Career Experience</span></a></li>
+                     <li class="relative px-6 py-3"><a class="nav-link inline-flex items-center w-full" href="#education"><span class="ml-4">Education & Skills</span></a></li>
+                </ul>
+                 <div class="px-6 my-6">
+                    <a href="https://www.linkedin.com/in/kishonclayborne/" target="_blank" class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-[#C0843E] border border-transparent rounded-lg active:bg-[#A46E31] hover:bg-[#A46E31]">
+                        Connect on LinkedIn
+                        <span class="ml-2" aria-hidden="true">&#10132;</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <div class="flex flex-col flex-1 w-full">
+            <!-- Mobile Header -->
+            <header class="z-10 py-4 bg-white shadow-md md:hidden">
+                <div class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600">
+                    <button class="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple" @click="open = !open" aria-label="Menu">
+                        <svg class="w-6 h-6" aria-hidden="true" fill="#3D3D3D" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    <span class="text-lg font-bold text-gray-800 font-display">Kishon Clayborne</span>
+                    <span></span>
+                </div>
+            </header>
+
+            <main class="h-full overflow-y-auto">
+                <div class="container px-6 mx-auto grid py-12">
+                    
+                    <section id="home" class="content-section">
+                        <h1 class="mb-4 text-3xl font-bold text-gray-700 font-display">Executive Strategic Narrative</h1>
+                        <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+                             <p class="text-gray-600 leading-relaxed mb-4">This profile outlines the career of a serial entrepreneur and systems-driven operator. It details a journey defined by identifying fragmentation and complexity, and engineering streamlined, scalable, and highly profitable solutions. Below, you can explore the core pillars of my professional brand, my detailed career history, and the key skills I leverage to drive growth and create value.</p>
+                             <div class="space-y-4 text-gray-700 leading-relaxed">
+                                <p>As a serial entrepreneur and systems-driven operator, I have built my career on a simple premise: identifying fragmentation and complexity, and engineering streamlined, scalable, and highly profitable solutions. My journey began not on Wall Street, but in my childhood, immersed in the world of family business.</p>
+                                <p>I grew up watching my parents, Keith and Bernadette Clayborne, build a diverse portfolio of businesses—from dry cleaners in New York to a marketing agency in the Bahamas and newspapers in South Florida. This upbringing was a real-world MBA in operations and deal-making, culminating in my direct involvement in valuing and negotiating the 2005 sale of my father's newspaper, 'The Broward Times'. This foundation in generational entrepreneurship, combined with a formal education in finance from Morehouse College and early career experience as a Financial Analyst at Banc of America Securities, gave me a unique, quantitative-yet-practical approach to building businesses.</p>
+                                <p>Today, I am channeling this cumulative experience into my latest venture, Hurricane Ready. We are revolutionizing the fragmented home improvement market in South Florida. We are replacing the stress and inefficiency of the traditional model with transparency, value, and a commitment to an exceptional customer experience. I am always open to connecting with fellow entrepreneurs, investors, and business leaders. Whether you are seeking advisory on scaling your operations, evaluating a franchise or acquisition opportunity, or exploring strategic partnerships, let's connect and discuss how we can build something of value together.</p>
+                             </div>
+                        </div>
+                    </section>
+                    
+                    <section id="pillars" class="content-section mt-12">
+                        <h2 class="mb-4 text-3xl font-bold text-gray-700 font-display">The Four Pillars of My Brand</h2>
+                        <p class="text-gray-600 leading-relaxed mb-6 max-w-3xl">A powerful executive brand is built on a consistent narrative. My career reveals four distinct, yet interconnected, pillars. These form the foundation of my professional story and brand identity. Click on each pillar to explore the details.</p>
+
+                        <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4" id="pillar-cards-container">
+                        </div>
+
+                        <div id="pillar-detail-container" class="bg-white p-8 rounded-xl shadow-lg border border-gray-100 transition-all duration-300" style="display: none;">
+                            <h3 id="pillar-detail-title" class="font-display text-2xl text-gray-800 mb-4"></h3>
+                            <div id="pillar-detail-content" class="space-y-3 text-gray-700 leading-relaxed"></div>
+                        </div>
+                    </section>
+
+                    <section id="experience" class="content-section mt-12">
+                         <h2 class="mb-4 text-3xl font-bold text-gray-700 font-display">Career Experience</h2>
+                         <p class="text-gray-600 leading-relaxed mb-6 max-w-3xl">This timeline highlights my journey from high finance to founding and scaling multiple businesses. Each role provided unique challenges and opportunities that compounded my expertise in operations, strategy, and execution.</p>
+                         <div id="timeline-container" class="space-y-8"></div>
+                    </section>
+
+                    <section id="education" class="content-section mt-12">
+                        <h2 class="mb-4 text-3xl font-bold text-gray-700 font-display">Education & Core Competencies</h2>
+                        <p class="text-gray-600 leading-relaxed mb-6 max-w-3xl">A strong educational foundation in finance, coupled with continuous, high-level business training, provides the framework for my strategic and operational approach. Below are my key credentials and a summary of my core skills.</p>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div id="education-container" class="space-y-6"></div>
+                            <div>
+                                <div class="p-6 bg-white rounded-xl shadow-lg border border-gray-100 h-full">
+                                    <h3 class="font-bold text-xl mb-4">Core Skills</h3>
+                                    <div id="skills-container" class="flex flex-wrap gap-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Data Objects
+            const pillarData = {
+                '1': {
+                    title: 'The Scalable Empire Builder',
+                    icon: '&#127970;',
+                    summary: 'Proven ability to take a concept from zero to a multi-million-dollar enterprise, mastering multi-unit growth and operational complexity.',
+                    content: `My 17-year journey with Golden Krust demonstrates a quantifiable ability to build a multi-million-dollar enterprise from the ground up. I didn't just manage growth; I manufactured it in a new market by creating the entire operational ecosystem.<br><br><strong>Key Achievements:</strong><ul class="list-disc list-inside mt-2"><li>Grew from 1 to 12 locations, generating ~$20M in collective revenue with 150+ employees.</li><li>Achieved profitability 10% higher than the system average through superior operational efficiency.</li><li>Secured over $5M in financing and personally oversaw more than a dozen buildouts.</li><li>Created an operational playbook that became a model for over 15 other franchisees.</li><li>Engineered a successful, multi-million-dollar exit, validating the value created.</li></ul>`
+                },
+                '2': {
+                    title: 'The Entrepreneurial Legacy',
+                    icon: '&#127944;',
+                    summary: 'Innate business acumen from a lifetime immersed in a family of multi-industry entrepreneurs, providing an intuitive grasp of business dynamics.',
+                    content: `My business acumen is not just learned; it's innate, a product of a lifetime immersed in entrepreneurship. I grew up in a family that built and operated a diverse portfolio of businesses—from dry cleaners in New York to a marketing agency and newspapers in the Bahamas and Florida.<br><br>This real-world education in adaptability, market analysis, and deal-making was not passive. In 2005, I played a direct role in valuing and negotiating the sale of my father's community newspaper, The Broward Times. This deep, lived experience provides a unique perspective and an intuitive understanding of business dynamics that cannot be replicated.`
+                },
+                '3': {
+                    title: 'The Strategic Operator & Financial Architect',
+                    icon: '&#128200;',
+                    summary: 'A fusion of quantitative financial skill with hands-on operational leadership, managing by the numbers to drive predictable results.',
+                    content: `I manage by the numbers, not just by feel. My career began with a rigorous foundation in quantitative analysis as a Financial Analyst at Banc of America Securities. This financial and systems-based mindset is the core of my value proposition.<br><br>From developing sophisticated financial models for capital investment at Golden Krust to my advisory work at Klayrock—where I've guided a $10M investment decision, driven a 28% COGS reduction for a client, and secured a $1.5M purchase price reduction through due diligence—my approach is defined by leveraging data to drive strategy and predictable results.`
+                },
+                '4': {
+                    title: 'The Modern Entrepreneur',
+                    icon: '&#128640;',
+                    summary: 'Applying a career of lessons to build innovative ventures that disrupt fragmented industries and solve consumer pain points.',
+                    content: `My current venture, Hurricane Ready, is the synthesis of my entire career. As licensed and insured contractors, we're dedicated to revolutionizing the home improvement industry by offering an experience founded on integrity, transparency, and saving our clients money without compromising on quality.<br><br>This venture demonstrates a repeatable methodology: identify a fragmented industry with a poor customer experience, and apply a systematic, transparent, and customer-centric solution. It's the mark of a serial entrepreneur who doesn't just start businesses, but builds them to solve specific market problems.`
+                }
+            };
+
+            const experienceData = [
+                {
+                    title: 'Founder & Chief Executive Officer',
+                    company: 'Hurricane Ready',
+                    dates: 'Present',
+                    location: 'Pembroke Pines, FL',
+                    description: 'As the founder of Hurricane Ready, I am leading a venture to revolutionize the $400B+ home improvement industry, starting with the high-demand market for impact windows and doors in South Florida. Our mission is to replace the stressful, inefficient process of securing home improvement services with an experience founded on integrity, transparency, and unparalleled customer service. As licensed and insured contractors, we are committed to delivering the absolute best work, saving our clients money without compromising on quality.',
+                    bullets: [
+                        'Pioneered a customer-centric approach that prioritizes homeowner education, transparent pricing, and direct communication, setting a new standard for integrity in the contracting industry.',
+                        'Established a brand identity centered on trust and expertise, reflected in our perfect 5.0-star Google rating and testimonials praising our professionalism and value-driven approach.',
+                        'Leveraging my experience as a licensed contractor to personally ensure the highest standards of quality, craftsmanship, and compliance on every project, protecting the homeowner\'s investment and safety.'
+                    ]
+                },
+                {
+                    title: 'Founder & Principal Advisor',
+                    company: 'Klayrock Advisory',
+                    dates: '2022 – Present',
+                    location: 'Pembroke Pines, FL',
+                    description: 'At Klayrock Advisory, I leverage nearly two decades of in-the-trenches experience as a multi-unit operator, financial analyst, and entrepreneur to provide high-impact advisory services to business owners and investors. My practice focuses on the critical intersections of strategy, finance, and operations, delivering tangible ROI.',
+                    stats: [
+                        { value: '$1.5M', label: 'Purchase Price Reduction via M&A Due Diligence' },
+                        { value: '26%', label: 'COGS Reduction for Multi-Unit Operator' },
+                        { value: '$5M', label: 'Commercial Lease Exit Negotiated to Save Business' }
+                    ]
+                },
+                {
+                    title: 'CEO & President | Multi-Unit Franchisee',
+                    company: 'Golden Krust',
+                    dates: '2005 – 2022',
+                    location: 'Miami-Dade & Broward County, FL',
+                    description: 'As the CEO and President of one of the largest franchise groups in the Golden Krust system, I led the strategic expansion of the brand in South Florida, building a multi-million dollar enterprise from the ground up. I transformed a single-store operation into a dominant regional player, mastering every aspect of multi-unit business scaling, P&L management, and operational excellence.',
+                    chart: true
+                },
+                {
+                    title: 'Financial Analyst, Treasury Trading Group',
+                    company: 'Banc of America Securities',
+                    dates: '2003 – 2005',
+                    location: 'New York, NY',
+                    description: 'Began my career in the proprietary treasury trading group of a major investment bank, where I developed a strong foundation in quantitative analysis, risk management, and financial technology. This role provided me with the rigorous analytical framework that has informed my data-driven approach to business operations and strategy throughout my entrepreneurial career.'
+                }
+            ];
+
+            const educationData = [
+                {
+                    institution: 'Morehouse College',
+                    degree: 'BA, Business Administration/Finance',
+                    details: 'Minors: Mathematics, Economics. Graduated Magna Cum Laude.',
+                    description: 'Graduated from one of the nation\'s most prestigious historically black colleges and universities, renowned for producing transformative leaders. My rigorous training provided the quantitative foundation for a career in strategic analysis and data-driven management.'
+                },
+                {
+                    institution: 'Goldman Sachs 10,000 Small Businesses',
+                    degree: 'Alumnus, Miami-Dade Cohort 2',
+                    details: null,
+                    description: 'Selected for and graduated from the prestigious Goldman Sachs 10,000 Small Businesses program, an intensive, MBA-level curriculum for high-growth entrepreneurs designed by Babson College.'
+                },
+                 {
+                    institution: 'Florida Restaurant and Lodging Association',
+                    degree: 'Former Board of Directors, Broward Chapter (2017)',
+                    details: null,
+                    description: 'Contributed to industry leadership and advocacy as a member of the Board of Directors for the FRLA, a 10,000+ member organization representing Florida\'s premier hospitality industry.'
+                }
+            ];
+            
+            const skillsData = [ 'Business Scaling', 'Operations Management', 'Entrepreneurship', 'Strategic Planning', 'P&L Management', 'Executive Leadership', 'Business Development', 'Start-up Leadership', 'Growth Strategy', 'Franchise Operations', 'Multi-Unit Management', 'Business Turnaround', 'M&A Due Diligence', 'Business Valuation', 'Capital Raising', 'Financial Modeling', 'Process Improvement', 'Negotiation', 'Contract Negotiation', 'Commercial Real Estate', 'Vendor Management', 'Team Leadership', 'Staff Management', 'Consulting', 'Project Management', 'Risk Management', 'Financial Analysis', 'Family Business', 'Home Improvement', 'Construction Management' ];
+            
+            // --- DOM Elements ---
+            const pillarCardsContainer = document.getElementById('pillar-cards-container');
+            const pillarDetailContainer = document.getElementById('pillar-detail-container');
+            const pillarDetailTitle = document.getElementById('pillar-detail-title');
+            const pillarDetailContent = document.getElementById('pillar-detail-content');
+            const timelineContainer = document.getElementById('timeline-container');
+            const educationContainer = document.getElementById('education-container');
+            const skillsContainer = document.getElementById('skills-container');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.content-section');
+
+            // --- State Variable for Chart ---
+            let growthChartInstance = null;
+
+            // --- Render Functions ---
+            function renderPillarCards() {
+                for (const [key, pillar] of Object.entries(pillarData)) {
+                    const card = document.createElement('div');
+                    card.className = 'pillar-card flex items-start p-4 bg-white rounded-lg shadow-xs cursor-pointer';
+                    card.dataset.pillarId = key;
+                    card.innerHTML = `
+                        <div class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full text-2xl">${pillar.icon}</div>
+                        <div>
+                            <p class="mb-2 text-md font-semibold text-gray-700">${pillar.title}</p>
+                            <p class="text-sm font-normal text-gray-600">${pillar.summary}</p>
+                        </div>
+                    `;
+                    pillarCardsContainer.appendChild(card);
+                }
+            }
+            
+            function renderTimeline() {
+                experienceData.forEach(exp => {
+                    const div = document.createElement('div');
+                    div.className = 'p-6 bg-white rounded-xl shadow-lg border border-gray-100';
+                    let statsHTML = exp.stats ? `<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4 text-center">${exp.stats.map(stat => `
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <p class="text-2xl font-bold text-[#A46E31]">${stat.value}</p>
+                            <p class="text-xs text-gray-600">${stat.label}</p>
+                        </div>`).join('')}</div>` : '';
+                    let chartHTML = exp.chart ? `<div class="mt-4">
+                        <h4 class="font-bold text-center mb-2">Empire Growth Metrics (2005 vs 2022)</h4>
+                        <div class="chart-container"><canvas id="growthChart"></canvas></div>
+                    </div>` : '';
+                    let bulletsHTML = exp.bullets ? `<ul class="list-disc list-inside mt-4 space-y-2 text-gray-600">${exp.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
+                    
+                    div.innerHTML = `
+                        <p class="text-sm text-[#C0843E] font-semibold">${exp.dates}</p>
+                        <h3 class="text-xl font-bold mt-1">${exp.title}</h3>
+                        <p class="text-md font-medium text-gray-600">${exp.company} - ${exp.location}</p>
+                        <p class="text-gray-600 mt-2">${exp.description}</p>
+                        ${statsHTML}${bulletsHTML}${chartHTML}
+                    `;
+                    timelineContainer.appendChild(div);
+                });
+            }
+            
+            function renderEducation() {
+                educationData.forEach(edu => {
+                    const div = document.createElement('div');
+                    div.className = 'p-6 bg-white rounded-xl shadow-lg border border-gray-100';
+                    div.innerHTML = `
+                         <h3 class="font-bold text-xl">${edu.institution}</h3>
+                         <p class="font-medium text-gray-700">${edu.degree}</p>
+                         ${edu.details ? `<p class="text-sm text-gray-500">${edu.details}</p>` : ''}
+                         <p class="mt-2 text-sm text-gray-600">${edu.description}</p>
+                    `;
+                    educationContainer.appendChild(div);
+                });
+            }
+
+            function renderSkills() {
+                skillsData.forEach(skill => {
+                    const span = document.createElement('span');
+                    span.className = 'bg-gray-100 text-gray-700 py-1 px-3 rounded-full text-sm font-medium';
+                    span.textContent = skill;
+                    skillsContainer.appendChild(span);
+                });
+            }
+
+            function renderGrowthChart() {
+                if (growthChartInstance) { // Check if chart instance already exists
+                    return;
+                }
+                const ctx = document.getElementById('growthChart')?.getContext('2d');
+                if (!ctx) return;
+                growthChartInstance = new Chart(ctx, { // Assign instance
+                    type: 'bar',
+                    data: {
+                        labels: ['Locations', 'Team Size'],
+                        datasets: [{
+                            label: 'Year 1 (2005)', data: [1, 10],
+                            backgroundColor: '#D1D5DB', borderColor: '#9CA3AF', borderWidth: 1
+                        }, {
+                            label: 'Peak (c. 2022)', data: [12, 150],
+                            backgroundColor: '#C0843E', borderColor: '#A46E31', borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { position: 'top' } },
+                        scales: { y: { beginAtZero: true, title: { display: true, text: 'Count' } } }
+                    }
+                });
+            }
+            
+            // --- Event Listeners ---
+            pillarCardsContainer.addEventListener('click', (e) => {
+                const card = e.target.closest('.pillar-card');
+                if (card) {
+                    const pillarId = card.dataset.pillarId;
+                    const data = pillarData[pillarId];
+                    document.querySelectorAll('.pillar-card').forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    pillarDetailTitle.textContent = data.title;
+                    pillarDetailContent.innerHTML = data.content;
+                    pillarDetailContainer.style.display = 'block';
+                    pillarDetailContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+
+            function updateActiveNavOnScroll() {
+                let currentSectionId = 'home';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.scrollY >= sectionTop - 150) {
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${currentSectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                if (currentSectionId === 'experience') {
+                    renderGrowthChart();
+                }
+            }
+
+            // --- Initial Render ---
+            renderPillarCards();
+            renderTimeline();
+            renderEducation();
+            renderSkills();
+            updateActiveNavOnScroll(); // Set initial state
+            window.addEventListener('scroll', updateActiveNavOnScroll);
+
+        });
+    </script>
+</body>
+</html>
